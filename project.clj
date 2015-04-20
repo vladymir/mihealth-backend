@@ -4,9 +4,12 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [compojure "1.3.1"]
-                 [ring/ring-defaults "0.1.2"]]
+                 [com.novemberain/monger "2.0.0"]
+                 [ring/ring-core "1.3.2"]
+                 [ring/ring-json "0.3.1"]
+                 [ring/ring-defaults "0.1.4"]]
   :plugins [[lein-ring "0.8.13"]]
-  :ring {:handler mihealth.handler/app}
+  :ring {:handler mihealth.handler/app :init mihealth.db/init}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})

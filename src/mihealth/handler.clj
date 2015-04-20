@@ -1,11 +1,19 @@
 (ns mihealth.handler
-  (:require [compojure.core :refer :all]
-            [compojure.route :as route]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+  (:require [mihealth.db :as midb])
+  (:require [compojure.route :as route]
+            [compojure.core :refer [GET defroutes]]
+            [ring.util.response :refer [resource-response response]]
+            [ring.middleware.json :as middleware]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults site-defaults]]))
 
 (defroutes app-routes
-  (GET "/" [] "Hello World")
+  (GET "/" [] (str (dissoc (first (midb/find-all)) :_id)))
   (route/not-found "Not Found"))
 
+;(def app
+ ; (wrap-defaults app-routes site-defaults))
 (def app
-  (wrap-defaults app-routes site-defaults))
+  (-> app-routes
+      (middleware/wrap-json-body)
+      (middleware/wrap-json-response)
+      (wrap-defaults api-defaults)))
